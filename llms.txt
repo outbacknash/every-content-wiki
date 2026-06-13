@@ -1,0 +1,14 @@
+# Every Content Wiki
+
+A knowledge base curated from Blair's every.to subscription, following the Karpathy LLM Wiki pattern.
+
+## Full Context
+- [CLAUDE.md](CLAUDE.md): Schema and instructions for agents.
+- [wiki/index.md](wiki/index.md): Master catalog of knowledge.
+
+## Structure
+- /raw: Source articles and transcripts.
+- /wiki: Structured concepts, entities, and summaries.
+
+## For Agents
+This repository is designed to be agent-readable. Use the tools provided by the Agent Wikis MCP server to query this repository efficiently.
