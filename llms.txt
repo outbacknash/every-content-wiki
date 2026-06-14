@@ -1,14 +1,25 @@
 # Every Content Wiki
 
-A knowledge base curated from Blair's every.to subscription, following the Karpathy LLM Wiki pattern.
+A knowledge base curated from Blair's Every.to content, following the LLM Wiki pattern.
 
-## Full Context
+## Core Resources
 - [CLAUDE.md](CLAUDE.md): Schema and instructions for agents.
 - [wiki/index.md](wiki/index.md): Master catalog of knowledge.
+- [wiki/log.md](wiki/log.md): Activity log.
+- [wiki/status.md](wiki/status.md): Repository health and coverage.
 
-## Structure
-- /raw: Source articles and transcripts.
-- /wiki: Structured concepts, entities, and summaries.
+## Knowledge Structure
+- [Levels of AI Adoption](wiki/concepts/levels-of-ai-adoption.md): 8-level framework by Mike Taylor & Laura Entis.
+- [Loops vs Prompts](wiki/concepts/loops-vs-prompts.md): Workflow optimization strategy.
+- [Writing Guardrails](wiki/concepts/writing-guardrails.md): Quality control for AI content.
+- [Out of Scope](wiki/meta/out-of-scope.md): Topics excluded from this wiki.
 
-## For Agents
-This repository is designed to be agent-readable. Use the tools provided by the Agent Wikis MCP server to query this repository efficiently.
+## Directory Mapping
+- `raw/`: Source articles and transcripts.
+- `wiki/concepts/`: Frameworks and methodologies.
+- `wiki/entities/`: Tools, people, and organizations.
+- `wiki/summaries/`: Source-specific summaries.
+- `wiki/meta/`: Governance and scope.
+
+## Agent Instructions
+This repository is optimized for LLM ingestion. Use `wiki/index.md` as the entry point for research and `CLAUDE.md` for formatting rules.
