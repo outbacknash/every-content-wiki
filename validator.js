@@ -91,9 +91,24 @@ function validateContent(filePath, relativePath) {
             if (target.indexOf('.md') === -1) {
                 target = target + '.md';
             }
+            
+            // Check if link is to a file in root or a subdir
             const targetPath = path.join(WIKI_DIR, target);
             if (!fs.existsSync(targetPath)) {
-                errors.push('[Links] Broken link [[' + linkPath + ']] in ' + relativePath);
+                // Also check if target is a concept/entity/etc if no prefix provided
+                const possibleSubdirs = ALLOWED_SUBDIRS;
+                let found = false;
+                for (const subdir of possibleSubdirs) {
+                    const checkPath = subdir + '/' + target;
+                    // Check local filesystem in sandbox
+                    if (fs.existsSync(path.join('/workspace/user/every-content-wiki/wiki', checkPath))) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                   errors.push('[Links] Broken link [[' + linkPath + ']] in ' + relativePath);
+                }
             }
         }
     }
