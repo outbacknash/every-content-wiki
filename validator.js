@@ -2,53 +2,56 @@ const fs = require('fs');
 const path = require('path');
 
 const WIKI_DIR = 'wiki';
-const ALLOWED_SUBDIRS = ['summaries', 'concepts', 'entities', 'syntheses'];
-const ALLOWED_ROOT_FILES = ['index.md', 'log.md'];
+const ALLOWED_SUBDIRS = ['summaries', 'concepts', 'entities', 'syntheses', 'meta'];
+const ALLOWED_ROOT_FILES = ['index.md', 'log.md', 'status.md'];
 
 console.log('--- Starting Wiki Validation ---');
 
 let errors = [];
 let filesProcessed = 0;
 
+if (!fs.existsSync(WIKI_DIR)) {
+    console.error('Wiki directory not found');
+    process.exit(1);
+}
+
 const rootList = fs.readdirSync(WIKI_DIR);
 for (let i = 0; i < rootList.length; i++) {
-    const rootName = rootList[i];
-    const rootPath = path.join(WIKI_DIR, rootName);
+    const entryName = rootList[i];
+    const entryPath = path.join(WIKI_DIR, entryName);
     
     let isDir = false;
     try {
-        fs.readdirSync(rootPath);
-        isDir = true;
+        if (ALLOWED_SUBDIRS.indexOf(entryName) !== -1) {
+            fs.readdirSync(entryPath);
+            isDir = true;
+        }
     } catch (e) {
         isDir = false;
     }
     
     if (isDir) {
-        const subList = fs.readdirSync(rootPath);
+        const subList = fs.readdirSync(entryPath);
         for (let j = 0; j < subList.length; j++) {
             const fileName = subList[j];
-            const filePath = path.join(rootPath, fileName);
-            const relPath = path.join(rootName, fileName);
+            const filePath = path.join(entryPath, fileName);
+            const relPath = path.join(entryName, fileName);
             
             filesProcessed++;
-            const parts = relPath.split(path.sep);
-            if (ALLOWED_SUBDIRS.indexOf(parts[0]) === -1) {
-                errors.push('[Location] File in unauthorized subdirectory: ' + relPath);
-            }
             validateContent(filePath, relPath);
         }
     } else {
         filesProcessed++;
-        if (ALLOWED_ROOT_FILES.indexOf(rootName) === -1) {
-            errors.push('[Location] File in wiki root not allowed: ' + rootName);
+        if (ALLOWED_ROOT_FILES.indexOf(entryName) === -1) {
+            errors.push('[Location] File/Dir in wiki root not allowed: ' + entryName);
         }
-        validateContent(rootPath, rootName);
+        validateContent(entryPath, entryName);
     }
 }
 
 function validateContent(filePath, relativePath) {
-    const fileName = path.basename(filePath);
-    if (fileName.indexOf('.md') !== -1) {
+    if (relativePath.endsWith('.md')) {
+        const fileName = path.basename(filePath);
         const nameWithoutExt = fileName.substring(0, fileName.length - 3);
         if (!/^[a-z0-9-]+$/.test(nameWithoutExt)) {
             errors.push('[Naming] Invalid filename (must be lowercase-hyphenated): ' + relativePath);
